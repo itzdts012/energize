@@ -17,6 +17,8 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "types": ["node"],
+    "skipLibCheck": true,
     "plugins": [
       {
         "name": "next"
