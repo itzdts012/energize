@@ -13,6 +13,7 @@ import { TaskDetailDialog } from "./task-detail-dialog"
 import { TaskStatusButtons } from "./task-status-buttons"
 import { EditTaskDialog } from "./edit-task-dialog"
 import { DeleteTaskDialog } from "./delete-task-dialog"
+import { PriorityBadge } from "./priority-slider"
 
 interface TaskTableRowProps {
   task: Task
@@ -22,6 +23,7 @@ interface TaskTableRowProps {
   onUpdateTask: (taskId: string, updates: Partial<Task>) => void
   onDeleteTask: (taskId: string) => void
   onDuplicateTask: (taskId: string) => void
+  existingTasks: Task[]
 }
 
 export function TaskTableRow({
@@ -32,10 +34,11 @@ export function TaskTableRow({
   onUpdateTask,
   onDeleteTask,
   onDuplicateTask,
+  existingTasks,
 }: TaskTableRowProps) {
   const hasDetails = task.description || task.tags?.length || task.assignee
-    const hasSubtasks = task.subtasks && task.subtasks.length > 0
-    const completedSubtasks = task.subtasks?.filter((s) => s.completed).length ?? 0
+  const hasSubtasks = task.subtasks && task.subtasks.length > 0
+  const completedSubtasks = task.subtasks?.filter((s) => s.completed).length ?? 0
 
   return (
     <TableRow>
@@ -47,15 +50,16 @@ export function TaskTableRow({
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
-          <span className="font-medium">{task.title}</span>
-          {hasSubtasks && (
+            <span className="font-medium">{task.title}</span>
+            {hasSubtasks && (
             <span className="text-xs px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground">
-              {completedSubtasks}/{task.subtasks?.length}
+                {completedSubtasks}/{task.subtasks?.length}
             </span>
-          )}
-          {hasDetails && <TaskDetailDialog task={task} onUpdateTask={onUpdateTask} />}
+            )}
+            <TaskDetailDialog task={task} onUpdateTask={onUpdateTask} />
         </div>
       </TableCell>
+
       <TableCell>
         <Badge
           variant={
@@ -78,17 +82,7 @@ export function TaskTableRow({
         </Badge>
       </TableCell>
       <TableCell>
-        <Badge
-          variant={
-            task.priority === "high"
-              ? "destructive"
-              : task.priority === "medium"
-              ? "secondary"
-              : "outline"
-          }
-        >
-          {task.priority}
-        </Badge>
+        <PriorityBadge priority={task.priority} />
       </TableCell>
       <TableCell className="text-sm text-muted-foreground">
         {new Date(task.dueDate).toLocaleDateString("en-US", {
@@ -104,7 +98,7 @@ export function TaskTableRow({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <EditTaskDialog task={task} onUpdateTask={onUpdateTask}>
+            <EditTaskDialog task={task} onUpdateTask={onUpdateTask} existingTasks={existingTasks}>
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 Edit
               </DropdownMenuItem>

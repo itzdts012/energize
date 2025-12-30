@@ -20,6 +20,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Info, ChevronDown, ChevronUp } from "lucide-react"
 import type { Task } from "./types"
 import { TaskHistoryTimeline } from "./task-history-timeline"
+import { PriorityBadge } from "./priority-slider"
 import { Separator } from "@/components/ui/separator"
 
 interface TaskDetailDialogProps {
@@ -104,17 +105,7 @@ export function TaskDetailDialog({ task, onUpdateTask }: TaskDetailDialogProps) 
             </div>
             <div>
               <h4 className="text-sm font-medium mb-2">Priority</h4>
-              <Badge
-                variant={
-                  task.priority === "high"
-                    ? "destructive"
-                    : task.priority === "medium"
-                    ? "secondary"
-                    : "outline"
-                }
-              >
-                {task.priority}
-              </Badge>
+              <PriorityBadge priority={task.priority} />
             </div>
             <div>
               <h4 className="text-sm font-medium mb-2">Due Date</h4>
@@ -134,6 +125,34 @@ export function TaskDetailDialog({ task, onUpdateTask }: TaskDetailDialogProps) 
             )}
           </div>
 
+          {/* Additional Fields */}
+          {(task.project || task.estimatedMinutes || task.energyLevel) && (
+            <div className="grid grid-cols-2 gap-4">
+              {task.project && (
+                <div>
+                  <h4 className="text-sm font-medium mb-2">Project</h4>
+                  <p className="text-sm text-muted-foreground">{task.project}</p>
+                </div>
+              )}
+              {task.estimatedMinutes && (
+                <div>
+                  <h4 className="text-sm font-medium mb-2">Estimated Duration</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {task.estimatedMinutes} minutes
+                  </p>
+                </div>
+              )}
+              {task.energyLevel !== undefined && (
+                <div>
+                  <h4 className="text-sm font-medium mb-2">Energy Required</h4>
+                  <p className="text-sm text-muted-foreground">
+                    {task.energyLevel}%
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           {task.description && (
             <div>
               <h4 className="text-sm font-medium mb-2">Description</h4>
@@ -149,6 +168,37 @@ export function TaskDetailDialog({ task, onUpdateTask }: TaskDetailDialogProps) 
                   <Badge key={tag} variant="outline">
                     {tag}
                   </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Dependencies */}
+          {task.dependencies && task.dependencies.length > 0 && (
+            <div>
+              <h4 className="text-sm font-medium mb-2">Blocked By</h4>
+              <p className="text-xs text-muted-foreground">
+                This task depends on {task.dependencies.length}{" "}
+                {task.dependencies.length === 1 ? "task" : "tasks"}
+              </p>
+            </div>
+          )}
+
+          {/* Attachments */}
+          {task.attachments && task.attachments.length > 0 && (
+            <div>
+              <h4 className="text-sm font-medium mb-2">Attachments</h4>
+              <div className="space-y-2">
+                {task.attachments.map((attachment) => (
+                  <a
+                    key={attachment.id}
+                    href={attachment.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
+                  >
+                    {attachment.name}
+                  </a>
                 ))}
               </div>
             </div>
