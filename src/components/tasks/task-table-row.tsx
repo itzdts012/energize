@@ -11,12 +11,16 @@ import { MoreHorizontal } from "lucide-react"
 import type { Task } from "./types"
 import { TaskDetailDialog } from "./task-detail-dialog"
 import { TaskStatusButtons } from "./task-status-buttons"
+import { EditTaskDialog } from "./edit-task-dialog"
+import { DeleteTaskDialog } from "./delete-task-dialog"
 
 interface TaskTableRowProps {
   task: Task
   isSelected: boolean
   onToggle: (taskId: string) => void
   onStatusChange: (taskId: string, status: Task["status"]) => void
+  onUpdateTask: (taskId: string, updates: Partial<Task>) => void
+  onDeleteTask: (taskId: string) => void
 }
 
 export function TaskTableRow({
@@ -24,6 +28,8 @@ export function TaskTableRow({
   isSelected,
   onToggle,
   onStatusChange,
+  onUpdateTask,
+  onDeleteTask,
 }: TaskTableRowProps) {
   const hasDetails = task.description || task.tags?.length || task.assignee
 
@@ -89,11 +95,20 @@ export function TaskTableRow({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <EditTaskDialog task={task} onUpdateTask={onUpdateTask}>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                Edit
+              </DropdownMenuItem>
+            </EditTaskDialog>
             <DropdownMenuItem>Duplicate</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
-              Delete
-            </DropdownMenuItem>
+            <DeleteTaskDialog task={task} onDeleteTask={onDeleteTask}>
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                className="text-destructive"
+              >
+                Delete
+              </DropdownMenuItem>
+            </DeleteTaskDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       </TableCell>

@@ -85,12 +85,31 @@ export default function TasksPage() {
     )
   }
 
+  const handleCreateTask = (newTask: Omit<Task, "id">) => {
+    const task: Task = {
+      ...newTask,
+      id: Math.random().toString(36).substring(7),
+    }
+    setTasks((prev) => [task, ...prev])
+  }
+
+  const handleUpdateTask = (taskId: string, updates: Partial<Task>) => {
+    setTasks((prev) =>
+      prev.map((task) => (task.id === taskId ? { ...task, ...updates } : task))
+    )
+  }
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks((prev) => prev.filter((task) => task.id !== taskId))
+    setSelectedTasks((prev) => prev.filter((id) => id !== taskId))
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6">
       <PageHeader
         title="Tasks"
         description="Manage your daily tasks and projects"
-        action={<CreateTaskDialog />}
+        action={<CreateTaskDialog onCreateTask={handleCreateTask} />}
       />
 
       <TaskToolbar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
@@ -100,6 +119,8 @@ export default function TasksPage() {
         selectedTasks={selectedTasks}
         onToggleTask={toggleTask}
         onStatusChange={handleStatusChange}
+        onUpdateTask={handleUpdateTask}
+        onDeleteTask={handleDeleteTask}
       />
 
       <div className="flex flex-col gap-4">

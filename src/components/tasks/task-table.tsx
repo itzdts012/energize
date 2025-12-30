@@ -14,6 +14,8 @@ interface TaskTableProps {
   selectedTasks: string[]
   onToggleTask: (taskId: string) => void
   onStatusChange: (taskId: string, status: Task["status"]) => void
+  onUpdateTask: (taskId: string, updates: Partial<Task>) => void
+  onDeleteTask: (taskId: string) => void
 }
 
 export function TaskTable({
@@ -21,6 +23,8 @@ export function TaskTable({
   selectedTasks,
   onToggleTask,
   onStatusChange,
+  onUpdateTask,
+  onDeleteTask,
 }: TaskTableProps) {
   return (
     <div className="rounded-lg border bg-card">
@@ -44,6 +48,8 @@ export function TaskTable({
                 isSelected={selectedTasks.includes(task.id)}
                 onToggle={onToggleTask}
                 onStatusChange={onStatusChange}
+                onUpdateTask={onUpdateTask}
+                onDeleteTask={onDeleteTask}
               />
             ))
           ) : (

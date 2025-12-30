@@ -29,34 +29,39 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { taskFormSchema, type TaskFormValues } from "./task-form-schema"
 import type { Task } from "./types"
 
-interface CreateTaskDialogProps {
-  onCreateTask: (task: Omit<Task, "id">) => void
+interface EditTaskDialogProps {
+  task: Task
+  onUpdateTask: (taskId: string, updates: Partial<Task>) => void
+  children: React.ReactNode
 }
 
-export function CreateTaskDialog({ onCreateTask }: CreateTaskDialogProps) {
+export function EditTaskDialog({
+  task,
+  onUpdateTask,
+  children,
+}: EditTaskDialogProps) {
   const [open, setOpen] = useState(false)
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      status: "todo",
-      priority: "medium",
-      dueDate: "",
-      tags: "",
-      assignee: "",
+      title: task.title,
+      description: task.description || "",
+      status: task.status,
+      priority: task.priority,
+      dueDate: task.dueDate,
+      tags: task.tags?.join(", ") || "",
+      assignee: task.assignee || "",
     },
   })
 
   function onSubmit(values: TaskFormValues) {
-    const newTask: Omit<Task, "id"> = {
+    const updates: Partial<Task> = {
       title: values.title,
       description: values.description || undefined,
       status: values.status,
@@ -68,24 +73,18 @@ export function CreateTaskDialog({ onCreateTask }: CreateTaskDialogProps) {
       assignee: values.assignee || undefined,
     }
 
-    onCreateTask(newTask)
-    form.reset()
+    onUpdateTask(task.id, updates)
     setOpen(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          New Task
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create New Task</DialogTitle>
+          <DialogTitle>Edit Task</DialogTitle>
           <DialogDescription>
-            Add a new task to your list. Fill in the details below.
+            Update the task details below.
           </DialogDescription>
         </DialogHeader>
 
@@ -205,9 +204,7 @@ export function CreateTaskDialog({ onCreateTask }: CreateTaskDialogProps) {
                   <FormControl>
                     <Input placeholder="development, design, urgent" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Separate tags with commas
-                  </FormDescription>
+                  <FormDescription>Separate tags with commas</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -238,7 +235,7 @@ export function CreateTaskDialog({ onCreateTask }: CreateTaskDialogProps) {
               >
                 Cancel
               </Button>
-              <Button type="submit">Create Task</Button>
+              <Button type="submit">Update Task</Button>
             </DialogFooter>
           </form>
         </Form>
