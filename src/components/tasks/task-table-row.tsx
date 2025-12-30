@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,22 +10,29 @@ import { TableCell, TableRow } from "@/components/ui/table"
 import { MoreHorizontal } from "lucide-react"
 import type { Task } from "./types"
 import { TaskDetailDialog } from "./task-detail-dialog"
+import { TaskStatusButtons } from "./task-status-buttons"
 
 interface TaskTableRowProps {
   task: Task
   isSelected: boolean
   onToggle: (taskId: string) => void
+  onStatusChange: (taskId: string, status: Task["status"]) => void
 }
 
-export function TaskTableRow({ task, isSelected, onToggle }: TaskTableRowProps) {
+export function TaskTableRow({
+  task,
+  isSelected,
+  onToggle,
+  onStatusChange,
+}: TaskTableRowProps) {
   const hasDetails = task.description || task.tags?.length || task.assignee
 
   return (
     <TableRow>
       <TableCell>
-        <Checkbox
-          checked={isSelected}
-          onCheckedChange={() => onToggle(task.id)}
+        <TaskStatusButtons
+          status={task.status}
+          onStatusChange={(status) => onStatusChange(task.id, status)}
         />
       </TableCell>
       <TableCell>
@@ -42,6 +48,8 @@ export function TaskTableRow({ task, isSelected, onToggle }: TaskTableRowProps) 
               ? "default"
               : task.status === "in-progress"
               ? "secondary"
+              : task.status === "hold"
+              ? "outline"
               : "outline"
           }
         >
@@ -49,6 +57,8 @@ export function TaskTableRow({ task, isSelected, onToggle }: TaskTableRowProps) 
             ? "In Progress"
             : task.status === "done"
             ? "Done"
+            : task.status === "hold"
+            ? "Hold"
             : "To Do"}
         </Badge>
       </TableCell>

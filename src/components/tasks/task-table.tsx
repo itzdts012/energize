@@ -1,4 +1,3 @@
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   Table,
   TableBody,
@@ -14,17 +13,21 @@ interface TaskTableProps {
   tasks: Task[]
   selectedTasks: string[]
   onToggleTask: (taskId: string) => void
+  onStatusChange: (taskId: string, status: Task["status"]) => void
 }
 
-export function TaskTable({ tasks, selectedTasks, onToggleTask }: TaskTableProps) {
+export function TaskTable({
+  tasks,
+  selectedTasks,
+  onToggleTask,
+  onStatusChange,
+}: TaskTableProps) {
   return (
     <div className="rounded-lg border bg-card">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-12">
-              <Checkbox />
-            </TableHead>
+            <TableHead className="w-[140px]">Status</TableHead>
             <TableHead>Task</TableHead>
             <TableHead className="w-32">Status</TableHead>
             <TableHead className="w-24">Priority</TableHead>
@@ -40,6 +43,7 @@ export function TaskTable({ tasks, selectedTasks, onToggleTask }: TaskTableProps
                 task={task}
                 isSelected={selectedTasks.includes(task.id)}
                 onToggle={onToggleTask}
+                onStatusChange={onStatusChange}
               />
             ))
           ) : (

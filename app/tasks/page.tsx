@@ -10,7 +10,7 @@ import { TaskFooter } from "@/components/tasks/task-footer"
 import { usePagination } from "@/hooks/use-pagination"
 import type { Task } from "@/components/tasks/types"
 
-const tasks: Task[] = [
+const initialTasks: Task[] = [
   {
     id: "1",
     title: "Build Energize dashboard",
@@ -42,46 +42,15 @@ const tasks: Task[] = [
   {
     id: "4",
     title: "Read 30 pages",
-    status: "todo",
+    status: "hold",
     priority: "low",
     dueDate: "2025-12-30",
     tags: ["reading"],
   },
-  {
-    id: "5",
-    title: "Update portfolio website",
-    status: "in-progress",
-    priority: "medium",
-    dueDate: "2026-01-05",
-    description: "Add new projects and refresh design",
-    tags: ["development"],
-  },
-  {
-    id: "6",
-    title: "Call dentist",
-    status: "todo",
-    priority: "high",
-    dueDate: "2025-12-31",
-  },
-  {
-    id: "7",
-    title: "Meal prep for week",
-    status: "todo",
-    priority: "medium",
-    dueDate: "2026-01-01",
-    tags: ["health", "cooking"],
-  },
-  {
-    id: "8",
-    title: "Review Q4 goals",
-    status: "done",
-    priority: "high",
-    dueDate: "2025-12-28",
-    description: "Analyze goal completion rate",
-  },
 ]
 
 export default function TasksPage() {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTasks, setSelectedTasks] = useState<string[]>([])
 
@@ -110,6 +79,12 @@ export default function TasksPage() {
     )
   }
 
+  const handleStatusChange = (taskId: string, status: Task["status"]) => {
+    setTasks((prev) =>
+      prev.map((task) => (task.id === taskId ? { ...task, status } : task))
+    )
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6">
       <PageHeader
@@ -124,6 +99,7 @@ export default function TasksPage() {
         tasks={paginatedData}
         selectedTasks={selectedTasks}
         onToggleTask={toggleTask}
+        onStatusChange={handleStatusChange}
       />
 
       <div className="flex flex-col gap-4">
