@@ -32,7 +32,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { taskFormSchema, type TaskFormValues } from "./task-form-schema"
-import type { Task } from "./types"
+import { SubtaskManager } from "./subtask-manager"
+import type { Task, Subtask } from "./types"
 
 interface EditTaskDialogProps {
   task: Task
@@ -46,6 +47,7 @@ export function EditTaskDialog({
   children,
 }: EditTaskDialogProps) {
   const [open, setOpen] = useState(false)
+  const [subtasks, setSubtasks] = useState<Subtask[]>(task.subtasks || [])
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
@@ -71,6 +73,7 @@ export function EditTaskDialog({
         ? values.tags.split(",").map((tag) => tag.trim()).filter(Boolean)
         : undefined,
       assignee: values.assignee || undefined,
+      subtasks: subtasks.length > 0 ? subtasks : undefined,
     }
 
     onUpdateTask(task.id, updates)
@@ -195,6 +198,13 @@ export function EditTaskDialog({
               )}
             />
 
+            <div>
+              <FormLabel>Subtasks</FormLabel>
+              <div className="mt-2">
+                <SubtaskManager subtasks={subtasks} onChange={setSubtasks} />
+              </div>
+            </div>
+
             <FormField
               control={form.control}
               name="tags"
@@ -230,6 +240,7 @@ export function EditTaskDialog({
                 variant="outline"
                 onClick={() => {
                   form.reset()
+                  setSubtasks(task.subtasks || [])
                   setOpen(false)
                 }}
               >

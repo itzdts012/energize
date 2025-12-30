@@ -16,6 +16,7 @@ interface TaskTableProps {
   onStatusChange: (taskId: string, status: Task["status"]) => void
   onUpdateTask: (taskId: string, updates: Partial<Task>) => void
   onDeleteTask: (taskId: string) => void
+  onDuplicateTask: (taskId: string) => void
 }
 
 export function TaskTable({
@@ -25,6 +26,7 @@ export function TaskTable({
   onStatusChange,
   onUpdateTask,
   onDeleteTask,
+  onDuplicateTask,
 }: TaskTableProps) {
   return (
     <div className="rounded-lg border bg-card">
@@ -50,6 +52,7 @@ export function TaskTable({
                 onStatusChange={onStatusChange}
                 onUpdateTask={onUpdateTask}
                 onDeleteTask={onDeleteTask}
+                onDuplicateTask={onDuplicateTask}
               />
             ))
           ) : (

@@ -33,7 +33,8 @@ import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { taskFormSchema, type TaskFormValues } from "./task-form-schema"
-import type { Task } from "./types"
+import { SubtaskManager } from "./subtask-manager"
+import type { Task, Subtask } from "./types"
 
 interface CreateTaskDialogProps {
   onCreateTask: (task: Omit<Task, "id">) => void
@@ -41,6 +42,7 @@ interface CreateTaskDialogProps {
 
 export function CreateTaskDialog({ onCreateTask }: CreateTaskDialogProps) {
   const [open, setOpen] = useState(false)
+  const [subtasks, setSubtasks] = useState<Subtask[]>([])
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
@@ -66,10 +68,12 @@ export function CreateTaskDialog({ onCreateTask }: CreateTaskDialogProps) {
         ? values.tags.split(",").map((tag) => tag.trim()).filter(Boolean)
         : undefined,
       assignee: values.assignee || undefined,
+      subtasks: subtasks.length > 0 ? subtasks : undefined,
     }
 
     onCreateTask(newTask)
     form.reset()
+    setSubtasks([])
     setOpen(false)
   }
 
@@ -196,6 +200,13 @@ export function CreateTaskDialog({ onCreateTask }: CreateTaskDialogProps) {
               )}
             />
 
+            <div>
+              <FormLabel>Subtasks</FormLabel>
+              <div className="mt-2">
+                <SubtaskManager subtasks={subtasks} onChange={setSubtasks} />
+              </div>
+            </div>
+
             <FormField
               control={form.control}
               name="tags"
@@ -233,6 +244,7 @@ export function CreateTaskDialog({ onCreateTask }: CreateTaskDialogProps) {
                 variant="outline"
                 onClick={() => {
                   form.reset()
+                  setSubtasks([])
                   setOpen(false)
                 }}
               >

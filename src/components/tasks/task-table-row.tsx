@@ -21,6 +21,7 @@ interface TaskTableRowProps {
   onStatusChange: (taskId: string, status: Task["status"]) => void
   onUpdateTask: (taskId: string, updates: Partial<Task>) => void
   onDeleteTask: (taskId: string) => void
+  onDuplicateTask: (taskId: string) => void
 }
 
 export function TaskTableRow({
@@ -30,8 +31,11 @@ export function TaskTableRow({
   onStatusChange,
   onUpdateTask,
   onDeleteTask,
+  onDuplicateTask,
 }: TaskTableRowProps) {
   const hasDetails = task.description || task.tags?.length || task.assignee
+    const hasSubtasks = task.subtasks && task.subtasks.length > 0
+    const completedSubtasks = task.subtasks?.filter((s) => s.completed).length ?? 0
 
   return (
     <TableRow>
@@ -44,7 +48,12 @@ export function TaskTableRow({
       <TableCell>
         <div className="flex items-center gap-2">
           <span className="font-medium">{task.title}</span>
-          {hasDetails && <TaskDetailDialog task={task} />}
+          {hasSubtasks && (
+            <span className="text-xs px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground">
+              {completedSubtasks}/{task.subtasks?.length}
+            </span>
+          )}
+          {hasDetails && <TaskDetailDialog task={task} onUpdateTask={onUpdateTask} />}
         </div>
       </TableCell>
       <TableCell>
@@ -100,7 +109,9 @@ export function TaskTableRow({
                 Edit
               </DropdownMenuItem>
             </EditTaskDialog>
-            <DropdownMenuItem>Duplicate</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onDuplicateTask(task.id)}>
+              Duplicate
+            </DropdownMenuItem>
             <DeleteTaskDialog task={task} onDeleteTask={onDeleteTask}>
               <DropdownMenuItem
                 onSelect={(e) => e.preventDefault()}
