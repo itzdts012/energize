@@ -6,7 +6,11 @@ interface TaskFooterProps {
   filteredCount: number
 }
 
-export function TaskFooter({ tasks, selectedCount, filteredCount }: TaskFooterProps) {
+export function TaskFooter({
+  tasks,
+  selectedCount,
+  filteredCount,
+}: TaskFooterProps) {
   const completedCount = tasks.filter((t) => t.status === "done").length
 
   return (
