@@ -16,6 +16,7 @@ import {
   Hash
 } from 'lucide-react'
 import { Button } from '@/components/core/button'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export default function InputDemo() {
   const [searchValue, setSearchValue] = useState("")

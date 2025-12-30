@@ -1,6 +1,6 @@
 import { Button } from '@/components/core/button'
 import { Plus, Trash2, Download, Send, Heart, Star } from 'lucide-react'
-
+import { ThemeToggle } from '@/components/theme-toggle'
 export default function ButtonDemo() {
   return (
     <div className="container mx-auto p-8 space-y-8">
@@ -9,6 +9,7 @@ export default function ButtonDemo() {
         <p className="text-muted-foreground">
           A collection of button variants for the Energize app
         </p>
+        <ThemeToggle />
       </div>
 
       {/* Variants */}

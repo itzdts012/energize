@@ -20,6 +20,7 @@ import {
   Bell,
   Share2
 } from 'lucide-react'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export default function IconButtonDemo() {
   return (

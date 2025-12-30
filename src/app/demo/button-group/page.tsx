@@ -20,6 +20,7 @@ import {
   ThumbsDown,
   Flag
 } from 'lucide-react'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export default function ButtonGroupDemo() {
   return (
@@ -29,6 +30,7 @@ export default function ButtonGroupDemo() {
         <p className="text-muted-foreground">
           Group related buttons together for better organization
         </p>
+        <ThemeToggle />
       </div>
 
       {/* Basic Horizontal */}
