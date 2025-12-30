@@ -12,6 +12,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
   Form,
   FormControl,
   FormDescription,
@@ -29,7 +34,7 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus } from "lucide-react"
+import { Plus, ChevronDown, ChevronRight } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -65,6 +70,7 @@ export function CreateTaskDialog({ onCreateTask, existingTasks }: CreateTaskDial
   const [subtasks, setSubtasks] = useState<Subtask[]>([])
   const [attachments, setAttachments] = useState<TaskAttachment[]>([])
   const [dependencies, setDependencies] = useState<string[]>([])
+  const [advancedOpen, setAdvancedOpen] = useState(false)
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
@@ -108,6 +114,7 @@ export function CreateTaskDialog({ onCreateTask, existingTasks }: CreateTaskDial
     setSubtasks([])
     setAttachments([])
     setDependencies([])
+    setAdvancedOpen(false)
     setOpen(false)
   }
 
@@ -267,7 +274,7 @@ export function CreateTaskDialog({ onCreateTask, existingTasks }: CreateTaskDial
                   <FormItem>
                     <FormLabel>Due Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input type="datetime-local" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -293,46 +300,65 @@ export function CreateTaskDialog({ onCreateTask, existingTasks }: CreateTaskDial
               </div>
             </div>
 
-            <div>
-              <FormLabel>Attachments</FormLabel>
-              <div className="mt-2">
-                <AttachmentManager
-                  attachments={attachments}
-                  onChange={setAttachments}
+            {/* Collapsible Advanced Options */}
+            <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
+              <CollapsibleTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="flex items-center gap-2 p-0 h-auto font-medium"
+                >
+                  {advancedOpen ? (
+                    <ChevronDown className="h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4" />
+                  )}
+                  Advanced Options
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="space-y-4 mt-4">
+                <FormField
+                  control={form.control}
+                  name="tags"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tags</FormLabel>
+                      <FormControl>
+                        <Input placeholder="development, design, urgent" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        Separate tags with commas
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-            </div>
 
-            <FormField
-              control={form.control}
-              name="tags"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tags</FormLabel>
-                  <FormControl>
-                    <Input placeholder="development, design, urgent" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Separate tags with commas
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <FormField
+                  control={form.control}
+                  name="assignee"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Assignee</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Assign to..." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="assignee"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Assignee</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Assign to..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <div>
+                  <FormLabel>Attachments</FormLabel>
+                  <div className="mt-2">
+                    <AttachmentManager
+                      attachments={attachments}
+                      onChange={setAttachments}
+                    />
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
 
             <DialogFooter>
               <Button
@@ -343,6 +369,7 @@ export function CreateTaskDialog({ onCreateTask, existingTasks }: CreateTaskDial
                   setSubtasks([])
                   setAttachments([])
                   setDependencies([])
+                  setAdvancedOpen(false)
                   setOpen(false)
                 }}
               >
