@@ -1,19 +1,24 @@
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/animate-ui/components/buttons/button"
 import { Calendar, User, MoreHorizontal } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { EditProjectDialog } from "./edit-project-dialog"
+import { DeleteProjectDialog } from "./delete-project-dialog"
 import type { Project } from "./types"
 
 interface ProjectHeaderProps {
   project: Project
+  onUpdateProject: (projectId: string, updates: Partial<Project>) => void
+  onDeleteProject: (projectId: string) => void
 }
 
-export function ProjectHeader({ project }: ProjectHeaderProps) {
+export function ProjectHeader({ project, onUpdateProject, onDeleteProject }: ProjectHeaderProps) {
   const getStatusColor = (status: Project["status"]) => {
     switch (status) {
       case "active": return "default"
@@ -45,11 +50,27 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Edit Project</DropdownMenuItem>
-            <DropdownMenuItem>Change Status</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
-              Delete Project
-            </DropdownMenuItem>
+            <EditProjectDialog
+              project={project}
+              onUpdateProject={onUpdateProject}
+              trigger={
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  Edit Project
+                </DropdownMenuItem>
+              }
+            />
+            <DropdownMenuSeparator />
+            <DeleteProjectDialog
+              project={project}
+              onDeleteProject={onDeleteProject}
+            >
+              <DropdownMenuItem 
+                className="text-destructive"
+                onSelect={(e) => e.preventDefault()}
+              >
+                Delete Project
+              </DropdownMenuItem>
+            </DeleteProjectDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

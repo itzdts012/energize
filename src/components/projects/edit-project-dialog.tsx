@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -47,28 +46,30 @@ const projectFormSchema = z.object({
 
 type ProjectFormValues = z.infer<typeof projectFormSchema>
 
-interface CreateProjectDialogProps {
-  onCreateProject: (project: Omit<Project, "id" | "progress" | "taskCount" | "completedTasks">) => void
+interface EditProjectDialogProps {
+  project: Project
+  onUpdateProject: (projectId: string, updates: Partial<Project>) => void
+  trigger?: React.ReactNode
 }
 
-export function CreateProjectDialog({ onCreateProject }: CreateProjectDialogProps) {
+export function EditProjectDialog({ project, onUpdateProject, trigger }: EditProjectDialogProps) {
   const [open, setOpen] = useState(false)
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      status: "active",
-      startDate: new Date().toISOString().split("T")[0],
-      dueDate: "",
-      owner: "",
-      tags: "",
+      name: project.name,
+      description: project.description || "",
+      status: project.status,
+      startDate: project.startDate,
+      dueDate: project.dueDate || "",
+      owner: project.owner || "",
+      tags: project.tags?.join(", ") || "",
     },
   })
 
   function onSubmit(values: ProjectFormValues) {
-    const newProject: Omit<Project, "id" | "progress" | "taskCount" | "completedTasks"> = {
+    const updates: Partial<Project> = {
       name: values.name,
       description: values.description || undefined,
       status: values.status,
@@ -80,24 +81,20 @@ export function CreateProjectDialog({ onCreateProject }: CreateProjectDialogProp
         : undefined,
     }
 
-    onCreateProject(newProject)
-    form.reset()
+    onUpdateProject(project.id, updates)
     setOpen(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          New Project
-        </Button>
+        {trigger || <Button variant="outline">Edit Project</Button>}
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Create New Project</DialogTitle>
+          <DialogTitle>Edit Project</DialogTitle>
           <DialogDescription>
-            Start a new project to organize your tasks and goals.
+            Update project details and settings.
           </DialogDescription>
         </DialogHeader>
 
@@ -228,14 +225,11 @@ export function CreateProjectDialog({ onCreateProject }: CreateProjectDialogProp
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => {
-                  form.reset()
-                  setOpen(false)
-                }}
+                onClick={() => setOpen(false)}
               >
                 Cancel
               </Button>
-              <Button type="submit">Create Project</Button>
+              <Button type="submit">Save Changes</Button>
             </DialogFooter>
           </form>
         </Form>

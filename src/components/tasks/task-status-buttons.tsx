@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/animate-ui/components/buttons/button"
 import { Check, Clock, Pause } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Task } from "./types"
@@ -21,7 +21,9 @@ export function TaskStatusButtons({
         size="icon"
         className={cn(
           "h-7 w-7",
-          status === "done" && "bg-green-500/20 text-green-600 hover:bg-green-500/30"
+          status === "done" 
+            ? "bg-green-500/20 text-green-600 hover:bg-green-500/20" 
+            : "hover:bg-green-500/10"
         )}
         onClick={() => onStatusChange("done")}
       >
@@ -33,7 +35,9 @@ export function TaskStatusButtons({
         size="icon"
         className={cn(
           "h-7 w-7",
-          status === "in-progress" && "bg-yellow-500/20 text-yellow-600 hover:bg-yellow-500/30"
+          status === "in-progress" 
+            ? "bg-yellow-500/20 text-yellow-600 hover:bg-yellow-500/20" 
+            : "hover:bg-yellow-500/10"
         )}
         onClick={() => onStatusChange("in-progress")}
       >
@@ -45,7 +49,9 @@ export function TaskStatusButtons({
         size="icon"
         className={cn(
           "h-7 w-7",
-          status === "hold" && "bg-blue-500/20 text-blue-600 hover:bg-blue-500/30"
+          status === "hold" 
+            ? "bg-blue-500/20 text-blue-600 hover:bg-blue-500/20" 
+            : "hover:bg-blue-500/10"
         )}
         onClick={() => onStatusChange("hold")}
       >

@@ -1,17 +1,18 @@
 "use client"
 
-import { use } from "react"
+import { use, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft } from "lucide-react"
 import { ProjectHeader } from "@/components/projects/project-header"
-import { ProjectStats } from "@/components/projects/project-stats"
+import { ProjectCharts } from "@/components/projects/project-charts"
 import { ProjectTasks } from "@/components/projects/project-tasks"
 import type { Project } from "@/components/projects/types"
 import type { Task } from "@/components/tasks/types"
 
 // Mock data - in real app this would come from API/database
-const mockProjects: Project[] = [
+const initialProjects: Project[] = [
   {
     id: "1",
     name: "Energize App",
@@ -116,8 +117,22 @@ export default function ProjectDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = use(params)
-  const project = mockProjects.find((p) => p.id === id)
+  const router = useRouter()
+  const [project, setProject] = useState<Project | undefined>(
+    initialProjects.find((p) => p.id === id)
+  )
   const tasks = mockProjectTasks[id] || []
+
+  const handleUpdateProject = (projectId: string, updates: Partial<Project>) => {
+    setProject((prev) => {
+      if (!prev) return prev
+      return { ...prev, ...updates }
+    })
+  }
+
+  const handleDeleteProject = (projectId: string) => {
+    router.push("/projects")
+  }
 
   if (!project) {
     return (
@@ -142,9 +157,14 @@ export default function ProjectDetailPage({
         </Button>
       </Link>
 
-      <ProjectHeader project={project} />
+      <ProjectHeader 
+        project={project} 
+        onUpdateProject={handleUpdateProject}
+        onDeleteProject={handleDeleteProject}
+      />
 
-      <ProjectStats project={project} />
+      {/* Replace ProjectStats with ProjectCharts */}
+      <ProjectCharts project={project} tasks={tasks} />
 
       <ProjectTasks projectId={id} tasks={tasks} />
     </div>
