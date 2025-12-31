@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/animate-ui/components/buttons/button"
+import { Button } from "@/components/ui/animate-ui/components/buttons/button"
 import { Plus } from "lucide-react"
 import { TaskTable } from "@/components/tasks/task-table"
 import { TaskToolbar } from "@/components/tasks/task-toolbar"

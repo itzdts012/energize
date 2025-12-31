@@ -1,7 +1,7 @@
 "use client"
 
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/animate-ui/components/buttons/button"
+import { Button } from "@/components/ui/animate-ui/components/buttons/button"
 import {
   DropdownMenu,
   DropdownMenuContent,

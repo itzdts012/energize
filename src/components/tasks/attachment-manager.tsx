@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/animate-ui/components/buttons/button"
+import { Button } from "@/components/ui/animate-ui/components/buttons/button"
 import { Input } from "@/components/ui/input"
 import { X, Paperclip, File } from "lucide-react"
 import type { TaskAttachment } from "./types"

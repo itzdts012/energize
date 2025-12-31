@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/animate-ui/components/buttons/button"
+import { Button } from "@/components/ui/animate-ui/components/buttons/button"
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/animate-ui/components/radix/dialog"
+} from "@/components/ui/animate-ui/components/radix/dialog"
 import {
   Collapsible,
   CollapsibleContent,

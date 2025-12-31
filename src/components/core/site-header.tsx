@@ -9,7 +9,7 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb"
-import { SearchForm } from "@/components/search-form"
+import { SearchForm } from "@/components/core/search-form"
 
 export function SiteHeader() {
   return (

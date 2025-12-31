@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
-import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { AppSidebar } from "@/components/app-sidebar"
-import { SiteHeader } from "@/components/site-header"
+import "@/styles/globals.css"
+import { ThemeProvider } from "@/components/core/theme-provider"
+import { AppSidebar } from "@/components/core/app-sidebar"
+import { SiteHeader } from "@/components/core/site-header"
 import {
   SidebarInset,
   SidebarProvider,

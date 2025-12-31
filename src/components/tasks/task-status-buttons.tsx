@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/animate-ui/components/buttons/button"
+import { Button } from "@/components/ui/animate-ui/components/buttons/button"
 import { Check, Clock, Pause } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Task } from "./types"

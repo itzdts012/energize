@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/animate-ui/components/buttons/button"
+import { Button } from "@/components/ui/animate-ui/components/buttons/button"
 import { Calendar, User, MoreHorizontal } from "lucide-react"
 import {
   DropdownMenu,

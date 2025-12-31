@@ -20,10 +20,10 @@ import {
   Zap,
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/core/nav-main"
+import { NavProjects } from "@/components/core/nav-projects"
+import { NavSecondary } from "@/components/core/nav-secondary"
+import { NavUser } from "@/components/core/nav-user"
 import {
   Sidebar,
   SidebarContent,
