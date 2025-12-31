@@ -282,24 +282,6 @@ export function CreateTaskDialog({ onCreateTask, existingTasks }: CreateTaskDial
               />
             </div>
 
-            <div>
-              <FormLabel>Subtasks</FormLabel>
-              <div className="mt-2">
-                <SubtaskManager subtasks={subtasks} onChange={setSubtasks} />
-              </div>
-            </div>
-
-            <div>
-              <FormLabel>Dependencies</FormLabel>
-              <div className="mt-2">
-                <DependencySelector
-                  availableTasks={existingTasks}
-                  selectedDependencies={dependencies}
-                  onChange={setDependencies}
-                />
-              </div>
-            </div>
-
             {/* Collapsible Advanced Options */}
             <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
               <CollapsibleTrigger asChild>
@@ -317,6 +299,26 @@ export function CreateTaskDialog({ onCreateTask, existingTasks }: CreateTaskDial
                 </Button>
               </CollapsibleTrigger>
               <CollapsibleContent className="space-y-4 mt-4">
+                {/* Subtasks - Now inside Advanced Options */}
+                <div>
+                  <FormLabel>Subtasks</FormLabel>
+                  <div className="mt-2">
+                    <SubtaskManager subtasks={subtasks} onChange={setSubtasks} />
+                  </div>
+                </div>
+
+                {/* Dependencies - Now inside Advanced Options */}
+                <div>
+                  <FormLabel>Dependencies</FormLabel>
+                  <div className="mt-2">
+                    <DependencySelector
+                      availableTasks={existingTasks}
+                      selectedDependencies={dependencies}
+                      onChange={setDependencies}
+                    />
+                  </div>
+                </div>
+
                 <FormField
                   control={form.control}
                   name="tags"

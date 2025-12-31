@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import {
+  BriefcaseBusiness,
   Calendar,
   CheckSquare,
   DollarSign,
@@ -103,6 +104,25 @@ const data = {
         {
           title: "Events",
           url: "/calendar/events",
+        },
+      ],
+    },
+    {
+      title: "Projects",
+      url: "/projects",
+      icon: BriefcaseBusiness, // or Briefcase, or Layers
+      items: [
+        {
+          title: "All Projects",
+          url: "/projects",
+        },
+        {
+          title: "Active",
+          url: "/projects?status=active",
+        },
+        {
+          title: "Completed",
+          url: "/projects?status=completed",
         },
       ],
     },
