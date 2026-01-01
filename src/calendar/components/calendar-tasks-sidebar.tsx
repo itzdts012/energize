@@ -62,7 +62,7 @@ export function CalendarTasksSidebar() {
   };
 
   return (
-    <div className="flex h-screen w-80 flex-col border-l bg-background">
+    <div className="flex h-[93vh] w-80 flex-col border-l bg-background overflow-hidden">
       {/* Header */}
       <div className="flex h-16 items-center justify-between border-b px-4">
         <div className="flex items-center gap-2">
@@ -75,7 +75,7 @@ export function CalendarTasksSidebar() {
           </Link>
         </Button>
       </div>
-
+    
       {/* Date & Actions */}
       <div className="space-y-3 border-b p-4">
         <p className="text-sm text-muted-foreground">

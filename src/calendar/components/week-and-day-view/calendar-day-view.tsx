@@ -55,7 +55,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           </div>
         </div>
 
-        <ScrollArea className="h-[800px]" type="always">
+        <ScrollArea className="h-[79vh]" type="always">
           <div className="flex">
             {/* Hours column */}
             <div className="relative w-18">

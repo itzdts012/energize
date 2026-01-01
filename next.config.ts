@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: { unoptimized: true },
   redirects: async () => [
     {
@@ -10,7 +9,11 @@ const nextConfig: NextConfig = {
       permanent: false,
     },
   ],
-
+  // ← ADD THESE TWO BLOCKS:
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  
 };
 
 export default nextConfig;

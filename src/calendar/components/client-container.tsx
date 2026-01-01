@@ -82,7 +82,7 @@ export function ClientContainer({ view }: IProps) {
     return filteredEvents.map((event) => ({ ...event, endDate: event.startDate }));
   }, [filteredEvents]);
 
-  const showSidebar = view === "agenda";
+  const showSidebar = true;
 
   return (
     <>

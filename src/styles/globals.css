@@ -141,3 +141,8 @@
     --chart-5: oklch(0.645 0.246 16.439);
   }
 }
+
+html, body, #root, #__next {
+  height: 100% !important;
+  overflow: hidden !important;
+}
