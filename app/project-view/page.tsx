@@ -1,8 +1,8 @@
 "use client"
 
-import { use, useState } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft } from "lucide-react"
 import { ProjectHeader } from "@/components/projects/project-header"
@@ -11,7 +11,7 @@ import { ProjectTasks } from "@/components/projects/project-tasks"
 import type { Project } from "@/components/projects/types"
 import type { Task } from "@/components/tasks/types"
 
-// Mock data - in real app this would come from API/database
+// --- Keep your Mock Data ---
 const initialProjects: Project[] = [
   {
     id: "1",
@@ -51,7 +51,6 @@ const initialProjects: Project[] = [
   }
 ]
 
-// Mock tasks for projects
 const mockProjectTasks: Record<string, Task[]> = {
   "1": [
     {
@@ -111,17 +110,23 @@ const mockProjectTasks: Record<string, Task[]> = {
   ]
 }
 
-export default function ProjectDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const { id } = use(params)
+// --- 1. Create the content component ---
+function ProjectViewContent() {
+  const searchParams = useSearchParams()
+  const id = searchParams.get("id") // Get ID from URL query
   const router = useRouter()
-  const [project, setProject] = useState<Project | undefined>(
-    initialProjects.find((p) => p.id === id)
-  )
-  const tasks = mockProjectTasks[id] || []
+  
+  const [project, setProject] = useState<Project | undefined>()
+
+  // Update state when ID changes
+  useEffect(() => {
+    if (id) {
+        const found = initialProjects.find((p) => p.id === id)
+        setProject(found)
+    }
+  }, [id])
+
+  const tasks = id ? (mockProjectTasks[id] || []) : []
 
   const handleUpdateProject = (projectId: string, updates: Partial<Project>) => {
     setProject((prev) => {
@@ -163,10 +168,18 @@ export default function ProjectDetailPage({
         onDeleteProject={handleDeleteProject}
       />
 
-      {/* Replace ProjectStats with ProjectCharts */}
       <ProjectCharts project={project} tasks={tasks} />
 
-      <ProjectTasks projectId={id} tasks={tasks} />
+      <ProjectTasks projectId={project.id} tasks={tasks} />
     </div>
+  )
+}
+
+// --- 2. Wrap in Suspense (REQUIRED for builds) ---
+export default function ProjectViewPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-center">Loading Project...</div>}>
+      <ProjectViewContent />
+    </Suspense>
   )
 }
